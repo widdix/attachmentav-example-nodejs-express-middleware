@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload with Malware Scan</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .upload-form {
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        input[type="file"] {
+            margin: 20px 0;
+            padding: 10px;
+            width: 100%;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <div class="upload-form">
+        <h1>Upload Single File</h1>
+        <form id="uploadFormSingle" enctype="multipart/form-data" method="POST" action="/upload">
+            <input type="file" id="fileInputSingle" name="file" required>
+            <button type="submit" id="submitBtnSingle">Upload and Scan</button>
+        </form>
+    </div>
+
+    <div class="upload-form">
+        <h1>Upload Multiple Files</h1>
+        <form id="uploadFormMulti" enctype="multipart/form-data" method="POST" action="/multi-upload">
+            <input type="file" id="fileInputMulti" name="files" multiple required>
+            <button type="submit" id="submitBtnMulti">Upload and Scan</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>
