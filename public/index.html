@@ -38,6 +38,28 @@
             background: #ccc;
             cursor: not-allowed;
         }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 4px;
+        }
+        .result.success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .result.error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        .result pre {
+            margin-top: 10px;
+            background: rgba(0,0,0,0.05);
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
     </style>
 </head>
 <body>
@@ -48,6 +70,7 @@
             <input type="file" id="fileInputSingle" name="file" required>
             <button type="submit" id="submitBtnSingle">Upload and Scan</button>
         </form>
+        <div id="resultSingle"></div>
     </div>
 
     <div class="upload-form">
@@ -56,7 +79,58 @@
             <input type="file" id="fileInputMulti" name="files" multiple required>
             <button type="submit" id="submitBtnMulti">Upload and Scan</button>
         </form>
+        <div id="resultMulti"></div>
     </div>
 </div>
+
+<script>
+    function handleFormSubmit(formId, buttonId, resultId) {
+        const form = document.getElementById(formId);
+        const button = document.getElementById(buttonId);
+        const resultDiv = document.getElementById(resultId);
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            button.disabled = true;
+            button.textContent = 'Scanning...';
+            resultDiv.innerHTML = '';
+
+            const formData = new FormData(form);
+
+            try {
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    resultDiv.className = 'result success';
+                    resultDiv.innerHTML = `
+                        <strong>✓ Success!</strong>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.innerHTML = `
+                        <strong>✗ Error</strong>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = `<strong>✗ Error:</strong> ${error.message}`;
+            } finally {
+                button.disabled = false;
+                button.textContent = 'Upload and Scan';
+            }
+        });
+    }
+
+    handleFormSubmit('uploadFormSingle', 'submitBtnSingle', 'resultSingle');
+    handleFormSubmit('uploadFormMulti', 'submitBtnMulti', 'resultMulti');
+</script>
 </body>
 </html>

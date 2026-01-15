@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Example of using attachmentav.com with Express.js in a form upload scenario.",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "serve": "node index.js"
   },

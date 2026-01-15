@@ -4,7 +4,12 @@ import pLimit from 'p-limit';
 import { Readable } from 'stream';
 
 const app = express();
-const upload = multer({ storage: multer.memoryStorage() });
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: 10 * 1024 * 1024, // 10MB limit enforced by attachmentAV API
+  }
+});
 
 const ATTACHMENTAV_API_KEY = process.env.ATTACHMENTAV_API_KEY;
 const ATTACHMENTAV_URL = 'https://eu.developer.attachmentav.com/v1/scan/sync/binary';
@@ -72,13 +77,14 @@ app.post('/multi-upload', upload.array('files'), async (req, res) => {
   const scanResponses = await Promise.all(scanRequests);
 
   for (const response of scanResponses) {
-    const scanResult = await response.json();
-
     if (!response.ok) {
       console.error(`AttachmentAV API error: ${response.status} ${response.statusText}`);
-      console.error(await response.text());
+      const errorText = await response.text();
+      console.error(errorText);
       return res.status(500).json({ error: 'Failed to scan file' });
     }
+
+    const scanResult = await response.json();
 
     if (scanResult.status === 'infected') {
       return res.status(400).json({
