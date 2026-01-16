@@ -1,8 +1,8 @@
-# AttachmentAV Express.js Middleware Example
+# attachmentAV Express.js Middleware Example
 
-A complete example demonstrating how to integrate [AttachmentAV](https://attachmentav.com) malware scanning into an Express.js application with file upload functionality.
+A complete example demonstrating how to integrate the [attachmentAV API](https://attachmentav.com/solution/virus-malware-scan-api/) minto an Express.js application to scan file uploads for malware.
 
-This example shows how to scan uploaded files for malware using the AttachmentAV API before processing them, supporting both single and multiple file uploads.
+This example shows how to scan uploaded files for viruses using the attachmentAV API before processing them, supporting both single and multiple file uploads.
 
 ## Features
 
@@ -15,14 +15,14 @@ This example shows how to scan uploaded files for malware using the AttachmentAV
 ## Prerequisites
 
 - Node.js 18+ (for native fetch API support)
-- An AttachmentAV API key ([Sign up here](https://attachmentav.com))
+- An attachmentAV API key ([Sign up here](https://attachmentav.com/subscribe/api/))
 
 ## Installation
 
 1. Clone this repository:
 ```bash
-git clone https://github.com/yourusername/attachmentav-express-middleware-example.git
-cd attachmentav-express-middleware-example
+git clone https://github.com/widdix/attachmentav-example-nodejs-express-middleware.git
+cd attachmentav-example-nodejs-express-middleware.
 ```
 
 2. Install dependencies:
@@ -50,10 +50,12 @@ http://localhost:3000
 
 ### Single File Upload (`/upload`)
 
+Code: https://github.com/widdix/attachmentav-example-nodejs-express-middleware/blob/main/index.js#L38-L67
+
 1. User selects a file through the web interface
 2. Multer middleware processes the multipart/form-data request
 3. File is stored in memory (not on disk)
-4. File buffer is sent to AttachmentAV API for scanning
+4. File buffer is sent to attachmentAV API for scanning
 5. Response handling:
    - If malware detected → Returns 400 error with details
    - If scan fails → Returns 500 error
@@ -62,6 +64,8 @@ http://localhost:3000
 ![Single File Upload Success](./docs/single-file-upload-success.png)
 
 ### Multiple File Upload (`/multi-upload`)
+
+Code: https://github.com/widdix/attachmentav-example-nodejs-express-middleware/blob/main/index.js#L69-L102
 
 1. User selects multiple files
 2. Files are processed concurrently with rate limiting (max 3 concurrent requests)
@@ -73,7 +77,7 @@ http://localhost:3000
 
 ### Rate Limiting
 
-The example uses [`p-limit`](https://www.npmjs.com/package/p-limit) to limit concurrent AttachmentAV API requests to 3, preventing API throttling when uploading multiple files.
+The example uses [`p-limit`](https://www.npmjs.com/package/p-limit) to limit concurrent attachmentAV API requests to 3, preventing API throttling when uploading multiple files.
 
 ## API Endpoints
 
@@ -137,7 +141,7 @@ Uploads and scans multiple files.
 
 ## Configuration
 
-### AttachmentAV Region
+### attachmentAV Region
 
 The example uses the EU endpoint by default:
 ```javascript
@@ -147,12 +151,14 @@ const ATTACHMENTAV_URL = 'https://eu.developer.attachmentav.com/v1/scan/sync/bin
 Available regions:
 - EU: `https://eu.developer.attachmentav.com/v1/scan/sync/binary`
 - US: `https://us.developer.attachmentav.com/v1/scan/sync/binary`
+- Canada: `https://canada.developer.attachmentav.com/v1/scan/sync/binary`
+- India: `https://india.developer.attachmentav.com/v1/scan/sync/binary`
 
 Change the `ATTACHMENTAV_URL` constant in `index.js` to use a different region.
 
 ### File Size Limits
 
-AttachmentAV allows files up to 10MB for the `/v1/scan/sync/binary` endpoint.
+attachmentAV allows files up to 10MB for the `/v1/scan/sync/binary` endpoint.
 You can configure a custom file size limit when initializing `multer` in [`index.js`](./index.js):
 
 ```javascript
@@ -212,7 +218,7 @@ MIT
 
 ## Resources
 
-- [AttachmentAV Documentation](https://attachmentav.com/docs)
-- [AttachmentAV API Reference](https://attachmentav.com/api)
+- [attachmentAV Documentation](https://attachmentav.com/help/virus-malware-scan-api/)
+- [attachmentAV API Reference](https://attachmentav.com/help/virus-malware-scan-api/developer/definition.html)
 - [Express.js Documentation](https://expressjs.com/)
 - [Multer Documentation](https://github.com/expressjs/multer)

@@ -43,7 +43,7 @@ app.post('/upload', upload.single('file'), async (req, res) => {
   const response = await submitFileForMalwareScan(req.file);
 
   if (!response.ok) {
-    console.error(`AttachmentAV API error: ${response.status} ${response.statusText}`);
+    console.error(`attachmentAV API error: ${response.status} ${response.statusText}`);
     console.error(await response.text());
     return res.status(500).json({ error: 'Failed to scan file' });
   }
@@ -78,7 +78,7 @@ app.post('/multi-upload', upload.array('files'), async (req, res) => {
 
   for (const response of scanResponses) {
     if (!response.ok) {
-      console.error(`AttachmentAV API error: ${response.status} ${response.statusText}`);
+      console.error(`attachmentAV API error: ${response.status} ${response.statusText}`);
       const errorText = await response.text();
       console.error(errorText);
       return res.status(500).json({ error: 'Failed to scan file' });
